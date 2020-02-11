@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // startService(new Intent(this, JokesService.class));
         recyclerView = findViewById(R.id.recycleJokes);
+
         Intent intent = new Intent(this, ServiceJokes.class);
         startService(intent);
 
@@ -71,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter = new MyListAdapter(jokesList);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                recyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this,
-                        DividerItemDecoration.HORIZONTAL));
+                recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
 
 
