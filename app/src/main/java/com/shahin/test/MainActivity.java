@@ -3,6 +3,7 @@ package com.shahin.test;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private JokesReceiver receiver;
-    private List<Model> modelList = new ArrayList<>();
     private MyListAdapter adapter;
+    List<String> jokesList = new ArrayList<>();
+    List<String> jokesL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         receiver = new JokesReceiver();
         registerReceiver(receiver, new IntentFilter(Constants.BROADCAST_ACTION));  //<----Register
+
+        jokesL = new ArrayList<>();
+
+
 
 
     }
@@ -53,15 +61,21 @@ public class MainActivity extends AppCompatActivity {
 
             if (intent.getAction().equals(Constants.BROADCAST_ACTION)) {
                 String jokes = intent.getStringExtra(Constants.BROADCAST_JOKE);
+                jokesList = intent.getStringArrayListExtra("Shahin");
+                Log.e("MainActivity", jokesList.toString());
 
-                Model model = new Model();
-                model.setJokes(jokes);
-                modelList.add(model);
-                adapter = new MyListAdapter(modelList);
+
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
+                adapter = new MyListAdapter(jokesList);
                 recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                recyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this,
+                        DividerItemDecoration.HORIZONTAL));
+
+
+
 
             }
         }

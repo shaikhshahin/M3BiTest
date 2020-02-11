@@ -21,11 +21,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ServiceJokes extends Service {
     Context context;
     RequestQueue queue;
+    List<String> jokesList ;
+    String MainJokes;
 
 
     public ServiceJokes() {
@@ -62,9 +65,13 @@ public class ServiceJokes extends Service {
 
             String urlPath = Constants.URL;
 
-            for (int i = 0; i <=10; i++) {
+
+
+            for (int i = 0; i <=20; i++) {
+                jokesList = new ArrayList<>();
 
                 RequestQueue queue = Volley.newRequestQueue(ServiceJokes.this); // this = context
+                final int finalI = i;
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.GET, urlPath, null, new Response.Listener<JSONObject>() {
 
@@ -74,7 +81,19 @@ public class ServiceJokes extends Service {
                                     JSONObject json = response.getJSONObject(Constants.RESPONSE_VALUE);
 
                                     String jokes = json.getString(Constants.RESPONSE_JOKE);
-                                    sendDataToActivity(jokes);
+
+                                    MainJokes=jokes;
+
+                                    jokesList.add(MainJokes);
+
+
+                                        sendDataToActivity(MainJokes);
+
+
+                                    Log.e("List", jokesList.toString());
+                                    Log.e("ListSize", String.valueOf(jokesList.size()));
+
+
 
                                     Log.e("Response", jokes);
 
@@ -93,17 +112,28 @@ public class ServiceJokes extends Service {
                         });
 
                 queue.add(jsonObjectRequest);
+
+
             }
 
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
     }
+
+
 
     private void sendDataToActivity(String jokes) {
         Intent sendLevel = new Intent();
         sendLevel.setAction(Constants.BROADCAST_ACTION);
         sendLevel.putExtra(Constants.BROADCAST_JOKE, jokes);
+        sendLevel.putStringArrayListExtra("Shahin", (ArrayList<String>) jokesList);
         sendBroadcast(sendLevel);
 
     }

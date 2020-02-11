@@ -7,11 +7,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.MyViewHolder> {
 
-    private List<Model> moviesList;
+    private List<String> jokesList= new ArrayList<>();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, year, genre;
@@ -19,12 +20,12 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.MyViewHold
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.jokeText);
- }
+        }
     }
 
 
-    public MyListAdapter(List<Model> moviesList) {
-        this.moviesList = moviesList;
+    public MyListAdapter(List<String> moviesList) {
+        this.jokesList = moviesList;
     }
 
     @Override
@@ -37,14 +38,13 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Model movie = moviesList.get(position);
-        holder.title.setText(movie.getJokes());
- }
+       // String movie = moviesList.get(position);
+        holder.title.setText(jokesList.get(position));
+    }
 
     @Override
     public int getItemCount() {
-        return moviesList.size();
+        return jokesList.size();
     }
 }
-
 
